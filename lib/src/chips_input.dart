@@ -1,9 +1,8 @@
 import 'dart:async';
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
+import 'package:flutter/widgets.dart';
 import 'suggestions_box_controller.dart';
 import 'text_cursor.dart';
 
@@ -98,6 +97,8 @@ class ChipsInputState<T> extends State<ChipsInput<T>>
   LayerLink _layerLink = LayerLink();
   Size size;
   Map<T, String> _enteredTexts = {};
+
+  AutofillScope get currentAutofillScope => null;
 
   TextInputConfiguration get textInputConfiguration => TextInputConfiguration(
         inputType: widget.inputType,
