@@ -11,14 +11,14 @@ class SuggestionsBoxController {
 
   SuggestionsBoxController(this.context);
 
-  open() {
+  void open() {
     if (this._isOpened) return;
     assert(this.overlayEntry != null);
     Overlay.of(context).insert(this.overlayEntry);
     this._isOpened = true;
   }
 
-  close() {
+  void close() {
     // debugPrint("Closing suggestion box");
     if (!this._isOpened) return;
     assert(this.overlayEntry != null);
@@ -26,7 +26,7 @@ class SuggestionsBoxController {
     this._isOpened = false;
   }
 
-  toggle() {
+  void toggle() {
     if (this._isOpened) {
       this.close();
     } else {
