@@ -91,6 +91,7 @@ class ChipsInputState<T> extends State<ChipsInput<T>>
   StreamController<List<T>> _suggestionsStreamController;
   int _searchId = 0;
   TextEditingValue _value = TextEditingValue();
+  // ignore: unused_field
   TextEditingValue _receivedRemoteTextEditingValue;
   TextInputConnection _textInputConnection;
   SuggestionsBoxController _suggestionsBoxController;
@@ -98,7 +99,11 @@ class ChipsInputState<T> extends State<ChipsInput<T>>
   Size size;
   Map<T, String> _enteredTexts = {};
 
+  @override
   AutofillScope get currentAutofillScope => null;
+
+  @override
+  void performPrivateCommand(String action, Map<String, dynamic> data) {}
 
   TextInputConfiguration get textInputConfiguration => TextInputConfiguration(
         inputType: widget.inputType,
@@ -116,6 +121,7 @@ class ChipsInputState<T> extends State<ChipsInput<T>>
   bool get _hasReachedMaxChips =>
       widget.maxChips != null && _chips.length >= widget.maxChips;
 
+  // ignore: unused_field
   FocusAttachment _focusAttachment;
   FocusNode _focusNode;
 
@@ -187,7 +193,7 @@ class ChipsInputState<T> extends State<ChipsInput<T>>
             BuildContext context,
             AsyncSnapshot<List<dynamic>> snapshot,
           ) {
-            if (snapshot.hasData && snapshot.data?.length != 0) {
+            if (snapshot.hasData && snapshot.data.isNotEmpty) {
               var suggestionsListView = Material(
                 elevation: 4.0,
                 child: ConstrainedBox(
@@ -319,18 +325,20 @@ class ChipsInputState<T> extends State<ChipsInput<T>>
 
   void _updateTextInputState({replaceText = false, putText = ''}) {
     final updatedText =
+        // ignore: prefer_interpolation_to_compose_strings
         String.fromCharCodes(_chips.map((_) => kObjectReplacementChar)) +
             "${replaceText ? '' : _value.normalCharactersText}" +
             putText;
     setState(() {
       _value = _value.copyWith(
         text: updatedText,
-        selection: TextSelection.collapsed(offset: updatedText.length),
+        //selection: TextSelection.collapsed(offset: updatedText.length), todo: reenable when flutter fixed this named parameter decl
         //composing: TextRange(start: 0, end: text.length),
       );
     });
     print(_value);
 
+    // ignore: prefer_conditional_assignment
     if (_textInputConnection == null) {
       _textInputConnection = TextInput.attach(this, textInputConfiguration);
     }
@@ -387,7 +395,7 @@ class ChipsInputState<T> extends State<ChipsInput<T>>
   @override
   TextEditingValue get currentTextEditingValue => _value;
 
-  // @override
+  @override
   void showAutocorrectionPromptRect(int start, int end) {}
 
   @override
@@ -442,7 +450,7 @@ class ChipsInputState<T> extends State<ChipsInput<T>>
               child: InputDecorator(
                 decoration: widget.decoration,
                 isFocused: _effectiveFocusNode.hasFocus,
-                isEmpty: _value.text.length == 0 && _chips.length == 0,
+                isEmpty: _value.text.isEmpty && _chips.isEmpty,
                 child: Wrap(
                   children: chipsChildren,
                   spacing: 4.0,
